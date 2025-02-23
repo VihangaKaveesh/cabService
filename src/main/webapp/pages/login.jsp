@@ -27,11 +27,7 @@
             <label for="password">Password:</label>
             <input type="password" name="password" required>
 
-            <label for="role">Login As:</label>
-            <select name="role">
-                <option value="customer">Customer</option>
-                <option value="management">Management</option>
-            </select>
+        
 
             <button type="submit">Login</button>
         </form>
