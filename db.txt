@@ -1,0 +1,45 @@
+use cabservice;
+
+CREATE TABLE Customers (
+    CustomerID INT PRIMARY KEY AUTO_INCREMENT,
+    NIC VARCHAR(20) UNIQUE NOT NULL,
+    Name VARCHAR(100) NOT NULL,
+    Email VARCHAR(100) UNIQUE NOT NULL,
+    Password VARCHAR(255) NOT NULL,
+    Phone VARCHAR(15) NOT NULL
+);
+
+CREATE TABLE Management (
+    ManagementID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(100) NOT NULL,
+    Email VARCHAR(100) UNIQUE NOT NULL,
+    Password VARCHAR(255) NOT NULL,
+    Phone VARCHAR(15) NOT NULL
+);
+
+CREATE TABLE Drivers (
+    DriverID INT PRIMARY KEY AUTO_INCREMENT,
+    NIC VARCHAR(20) UNIQUE NOT NULL,
+    Name VARCHAR(100) NOT NULL,
+    Email VARCHAR(100) UNIQUE NOT NULL,
+    Phone VARCHAR(15) NOT NULL,
+    LicenseNumber VARCHAR(50) UNIQUE NOT NULL,
+    VehicleType ENUM('Car', 'Bike', 'Van', 'Tuk') NOT NULL,
+    VehicleModel VARCHAR(100) NOT NULL,
+    VehicleNumber VARCHAR(20) UNIQUE NOT NULL,
+    Status ENUM('Available', 'Assigned') DEFAULT 'Available'
+);
+
+CREATE TABLE Bookings (
+    BookingID INT PRIMARY KEY AUTO_INCREMENT,
+    CustomerID INT,
+    DriverID INT DEFAULT NULL,
+    PickupLocation VARCHAR(255) NOT NULL,
+    DropoffLocation VARCHAR(255) NOT NULL,
+    VehicleType ENUM('Car', 'Bike', 'Van', 'Tuk') NOT NULL,
+    VehicleNumber VARCHAR(20) DEFAULT NULL,
+    Status ENUM('Pending', 'Assigned', 'Completed', 'Rejected') DEFAULT 'Pending',
+    BookingDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID) ON DELETE CASCADE,
+    FOREIGN KEY (DriverID) REFERENCES Drivers(DriverID) ON DELETE SET NULL
+);
