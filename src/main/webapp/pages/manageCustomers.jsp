@@ -10,8 +10,39 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
+        
+        <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        .navbar {
+            background-color: #333;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+        }
+        .navbar a {
+            color: white;
+            padding: 14px 20px;
+            text-decoration: none;
+            text-align: center;
+        }
+        .navbar a:hover {
+            background-color: #575757;
+             border-radius: 5px
+        }
+    </style>
+    
     </head>
     <body>
+        
+           <div class="navbar">
+                <a href="${pageContext.request.contextPath}/pages/managementDashboard.jsp">Home</a>
+        <a href="${pageContext.request.contextPath}/pages/manageCustomers.jsp">Customers</a>
+        <a href="${pageContext.request.contextPath}/pages/manageDrivers.jsp">Drivers</a>
+        <a href="${pageContext.request.contextPath}/pages/manageBookings.jsp">Bookings</a>
+        <a href="${pageContext.request.contextPath}/pages/login.jsp">Logout</a>
+       
+    </div>
         <h1>Hello World!</h1>
     </body>
 </html>

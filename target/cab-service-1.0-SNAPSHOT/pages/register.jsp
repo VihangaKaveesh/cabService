@@ -45,21 +45,21 @@
                 margin-top: 15px;
                 display: block;
                 font-size: 14px;
-            }
-            .register-link a {
+        }
+        .register-link a {
                 text-decoration: none;
                 color: blue;
                 font-weight: bold;
-            }
-            .register-link a:hover {
+        }
+        .register-link a:hover {
                 text-decoration: underline;
-            }
+        }
     </style>
     </head>
     <body>
 
     <form action="${pageContext.request.contextPath}/RegisterServlet" method="post">
-        <h2>Customer Registration</h2>
+        <h2>Register</h2>
         <input type="text" name="nic" placeholder="NIC" required>
         <input type="text" name="name" placeholder="Full Name" required>
         <input type="email" name="email" placeholder="Email" required>

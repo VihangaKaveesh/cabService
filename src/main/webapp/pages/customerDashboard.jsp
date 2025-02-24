@@ -19,8 +19,40 @@
                 }
             };
               </script>
+              
+              <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        .navbar {
+            background-color: #333;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+        }
+        .navbar a {
+            color: white;
+            padding: 14px 20px;
+            text-decoration: none;
+            text-align: center;
+        }
+        .navbar a:hover {
+            background-color: #575757;
+             border-radius: 5px
+        }
+    </style>
     </head>
     <body>
-        <h1>Hello Customer!</h1>
+          <div class="navbar">
+               <a href="${pageContext.request.contextPath}/pages/customerDashboard.jsp">Home</a>
+        <a href="${pageContext.request.contextPath}/pages/rideRequest.jsp">Need a Ride</a>
+        <a href="${pageContext.request.contextPath}/pages/bookingHistory.jsp">History</a>
+        <a href="${pageContext.request.contextPath}/pages/login.jsp">Logout</a>
+       
+    </div>
+
+    <div style="padding: 20px; text-align: center;">
+        <h2>Welcome to Our Website</h2>
+        <p>Use the navigation bar to explore different pages.</p>
+    </div>
     </body>
 </html>
