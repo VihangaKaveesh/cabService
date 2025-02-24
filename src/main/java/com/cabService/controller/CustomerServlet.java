@@ -16,8 +16,8 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author vihan
  */
-@WebServlet(name = "DriverController", urlPatterns = {"/DriverController"})
-public class DriverController extends HttpServlet {
+@WebServlet(name = "CustomerServlet", urlPatterns = {"/CustomerServlet"})
+public class CustomerServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,10 +36,10 @@ public class DriverController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet DriverController</title>");
+            out.println("<title>Servlet CustomerServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet DriverController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CustomerServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }

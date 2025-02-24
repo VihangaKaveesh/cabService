@@ -41,6 +41,19 @@
         button:hover {
             background: darkblue;
         }
+        .register-link {
+                margin-top: 15px;
+                display: block;
+                font-size: 14px;
+            }
+            .register-link a {
+                text-decoration: none;
+                color: blue;
+                font-weight: bold;
+            }
+            .register-link a:hover {
+                text-decoration: underline;
+            }
     </style>
     </head>
     <body>
@@ -53,6 +66,9 @@
         <input type="password" name="password" placeholder="Password" required>
         <input type="text" name="phone" placeholder="Phone Number" required>
         <button type="submit">Register</button>
+        
+         <p class="register-link">Already have an account? <a href="${pageContext.request.contextPath}/pages/login.jsp">Login here</a></p>
+
     </form>
 
     <%-- Show error message if registration fails --%>

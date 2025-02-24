@@ -14,11 +14,11 @@
     </welcome-file-list>
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>com.cabService.service.LoginServlet</servlet-class>
+        <servlet-class>com.cabService.controller.LoginServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>RegisterServlet</servlet-name>
-        <servlet-class>com.cabService.service.RegisterServlet</servlet-class>
+        <servlet-class>com.cabService.controller.RegisterServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>

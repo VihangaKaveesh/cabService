@@ -16,8 +16,8 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author vihan
  */
-@WebServlet(name = "ManagementController", urlPatterns = {"/ManagementController"})
-public class ManagementController extends HttpServlet {
+@WebServlet(name = "ManagementServlet", urlPatterns = {"/ManagementServlet"})
+public class ManagementServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,10 +36,10 @@ public class ManagementController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ManagementController</title>");
+            out.println("<title>Servlet ManagementServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ManagementController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ManagementServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }

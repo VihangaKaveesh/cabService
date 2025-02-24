@@ -84,7 +84,8 @@
             <% } %>
 
             <!-- Register Link -->
-            <p class="register-link">Don't have an account? <a href="pages/register.jsp">Register here</a></p>
+          <p class="register-link">Don't have an account? <a href="${pageContext.request.contextPath}/pages/register.jsp">Register here</a></p>
+
         </div>
     </body>
 </html>
