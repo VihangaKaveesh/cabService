@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
+//@WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
 public class LoginServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -30,7 +30,7 @@ public class LoginServlet extends HttpServlet {
         if (customerId > 0) {
             session.setAttribute("userId", customerId);
             session.setAttribute("role", "customer");
-            response.sendRedirect("customerDashboard.jsp");
+            response.sendRedirect("pages/customerDashboard.jsp");
             return;
         }
 
@@ -40,12 +40,16 @@ public class LoginServlet extends HttpServlet {
         if (managementId > 0) {
             session.setAttribute("userId", managementId);
             session.setAttribute("role", "management");
-            response.sendRedirect("managementDashboard.jsp");
+            response.sendRedirect("pages/managementDashboard.jsp");
             return;
+        }else {
+         // If login fails
+        response.sendRedirect("pages/login.jsp?error=Invalid credentials");
         }
 
-        // If login fails
-        response.sendRedirect("login.jsp?error=Invalid credentials");
+        
+       
     }
+   
 }
 

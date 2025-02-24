@@ -9,7 +9,7 @@ import com.cabService.dao.DBConnection;
 public class ManagementDAO {
         public int validateManagement(String email, String password) {
         int managementId = -1;
-        String query = "SELECT ManagementID FROM Management WHERE Email = ? AND Password = ?";
+        String query = "SELECT ManagementID FROM management WHERE Email = ? AND Password = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             

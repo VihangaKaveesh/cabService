@@ -10,7 +10,7 @@ import com.cabService.dao.DBConnection;
 public class CustomerDAO {
       public int validateCustomer(String email, String password) {
         int customerId = -1;
-        String query = "SELECT CustomerID FROM Customers WHERE Email = ? AND Password = ?";
+        String query = "SELECT CustomerID FROM customers WHERE Email = ? AND Password = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             
