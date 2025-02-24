@@ -9,7 +9,16 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Home</title>
+        
+        <script>
+            window.onload = function() {
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.has('message')) {
+                    alert(urlParams.get('message'));
+                }
+            };
+              </script>
     </head>
     <body>
         <h1>Hello Customer!</h1>

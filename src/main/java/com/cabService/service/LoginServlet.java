@@ -30,7 +30,7 @@ public class LoginServlet extends HttpServlet {
         if (customerId > 0) {
             session.setAttribute("userId", customerId);
             session.setAttribute("role", "customer");
-            response.sendRedirect("pages/customerDashboard.jsp");
+            response.sendRedirect("pages/customerDashboard.jsp?message= Welcome Customer!");
             return;
         }
 
@@ -40,11 +40,11 @@ public class LoginServlet extends HttpServlet {
         if (managementId > 0) {
             session.setAttribute("userId", managementId);
             session.setAttribute("role", "management");
-            response.sendRedirect("pages/managementDashboard.jsp");
+            response.sendRedirect("pages/managementDashboard.jsp?message= Welcome Manager!");
             return;
         }else {
          // If login fails
-        response.sendRedirect("pages/login.jsp?error=Invalid credentials");
+        response.sendRedirect("pages/login.jsp?message=Invalid credentials");
         }
 
         

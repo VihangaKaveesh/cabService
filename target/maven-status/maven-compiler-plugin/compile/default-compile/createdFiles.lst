@@ -8,6 +8,7 @@ com\cabService\dao\DriverDAO.class
 com\cabService\model\Driver.class
 com\cabService\dao\DBConnection.class
 com\cabService\service\LoginServlet.class
+com\cabService\service\RegisterServlet.class
 com\cabService\service\CustomerServlet.class
 com\cabService\model\User.class
 com\cabService\controller\ManagementController.class
