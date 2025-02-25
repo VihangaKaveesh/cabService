@@ -1,16 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.cabService.dao;
+
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import com.cabService.dao.DBConnection;
 
-
 public class CustomerDAO {
-    
-    //validating the customer upon login
-      public int validateCustomer(String email, String password) {
+
+    // Validating the customer upon login
+    public int validateCustomer(String email, String password) {
         int customerId = -1;
         String query = "SELECT CustomerID FROM customers WHERE Email = ? AND Password = ?";
         try (Connection conn = DBConnection.getConnection();
@@ -28,9 +26,9 @@ public class CustomerDAO {
         }
         return customerId;
     }
-      
-      //registering the customer
-       public boolean registerCustomer(String nic, String name, String email, String password, String phone) {
+
+    // Registering the customer
+    public boolean registerCustomer(String nic, String name, String email, String password, String phone) {
         boolean success = false;
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -60,6 +58,100 @@ public class CustomerDAO {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+        return success;
+    }
+
+   // Get all customers without including password
+public List<String[]> getAllCustomers() {
+    List<String[]> customers = new ArrayList<>();
+    String query = "SELECT CustomerID, NIC, Name, Email, Phone FROM customers";  // Excluding Password field
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(query);
+         ResultSet rs = stmt.executeQuery()) {
+
+        while (rs.next()) {
+            String[] customer = new String[5];  // Changed to 5 instead of 6 to match the selected columns
+            customer[0] = String.valueOf(rs.getInt("CustomerID"));
+            customer[1] = rs.getString("NIC");
+            customer[2] = rs.getString("Name");
+            customer[3] = rs.getString("Email");
+            customer[4] = rs.getString("Phone");
+            customers.add(customer);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return customers;
+}
+
+    // Get customer by ID
+    public String[] getCustomerById(int customerId) {
+//        String[] customer = null;
+        String query = "SELECT * FROM customers WHERE CustomerID = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, customerId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                String[] customer = new String[6];
+                customer[0] = String.valueOf(rs.getInt("CustomerID"));
+                customer[1] = rs.getString("NIC");
+                customer[2] = rs.getString("Name");
+                customer[3] = rs.getString("Email");
+                customer[4] = rs.getString("Password");
+                customer[5] = rs.getString("Phone");
+                return customer;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // Update customer details
+    public boolean updateCustomer(int customerId, String nic, String name, String email, String password, String phone) {
+        boolean success = false;
+        String query = "UPDATE customers SET NIC = ?, Name = ?, Email = ?, Password = ?, Phone = ? WHERE CustomerID = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, nic);
+            stmt.setString(2, name);
+            stmt.setString(3, email);
+            stmt.setString(4, password);
+            stmt.setString(5, phone);
+            stmt.setInt(6, customerId);
+
+            int rowsUpdated = stmt.executeUpdate();
+            if (rowsUpdated > 0) {
+                success = true;
+                System.out.println("Customer details updated successfully.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in updateCustomer: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return success;
+    }
+
+    // Delete customer
+    public boolean deleteCustomer(int customerId) {
+        boolean success = false;
+        String query = "DELETE FROM customers WHERE CustomerID = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, customerId);
+            int rowsDeleted = stmt.executeUpdate();
+            if (rowsDeleted > 0) {
+                success = true;
+                System.out.println("Customer deleted successfully.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in deleteCustomer: " + e.getMessage());
+            e.printStackTrace();
         }
         return success;
     }

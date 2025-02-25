@@ -1,87 +1,105 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package com.cabService.controller;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 
-/**
- *
- * @author vihan
- */
-@WebServlet(name = "CustomerServlet", urlPatterns = {"/CustomerServlet"})
+import com.cabService.dao.CustomerDAO;
+
+@WebServlet("/CustomerServlet")
 public class CustomerServlet extends HttpServlet {
+    
+    private CustomerDAO customerDAO;
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet CustomerServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet CustomerServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+    // Connecting to the database
+    public void init() throws ServletException {
+        customerDAO = new CustomerDAO();
+    }
+
+    // CRUD functions of the customer
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
+
+        try {
+            if ("add".equals(action)) {
+                addCustomer(request, response);
+            } else if ("update".equals(action)) {
+                updateCustomer(request, response);
+            } else if ("delete".equals(action)) {
+                deleteCustomer(request, response);
+            } else {
+                response.sendRedirect("manageCustomers.jsp");
+            }
+        } catch (SQLException e) {
+            throw new ServletException("Database operation failed", e);
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+    // Add customer part
+    private void addCustomer(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+        String nic = request.getParameter("nic");
+        String name = request.getParameter("name");
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        String phone = request.getParameter("phone");
+
+        boolean success = customerDAO.registerCustomer(nic, name, email, password, phone);
+        if (success) {
+            response.sendRedirect("manageCustomers.jsp?message=Customer added successfully");
+        } else {
+            response.sendRedirect("manageCustomers.jsp?message=Failed to add customer");
+        }
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+    // Update customer part
+    private void updateCustomer(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+        int customerId = Integer.parseInt(request.getParameter("customerId"));
+        String nic = request.getParameter("nic");
+        String name = request.getParameter("name");
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        String phone = request.getParameter("phone");
+
+        boolean success = customerDAO.updateCustomer(customerId, nic, name, email, password, phone);
+        if (success) {
+            response.sendRedirect("pages/manageCustomers.jsp?message=Customer updated successfully");
+        } else {
+            response.sendRedirect("pages/manageCustomers.jsp?message=Failed to update customer");
+        }
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+    // Delete customer part
+    private void deleteCustomer(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+        int customerId = Integer.parseInt(request.getParameter("customerId"));
+        boolean success = customerDAO.deleteCustomer(customerId);
+        if (success) {
+            response.sendRedirect("pages/manageCustomers.jsp?message=Customer deleted successfully");
+        } else {
+            response.sendRedirect("pages/manageCustomers.jsp?message=Failed to delete customer");
+        }
+    }
 
+    // Displaying customer details part
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+     
+            String action = request.getParameter("action");
+            if ("edit".equals(action)) {
+                int customerId = Integer.parseInt(request.getParameter("customerId"));
+                String[] customer = customerDAO.getCustomerById(customerId);
+                request.setAttribute("customer", customer);
+                request.getRequestDispatcher("editCustomer.jsp").forward(request, response);
+            } else {
+                List<String[]> customers = customerDAO.getAllCustomers();
+                request.setAttribute("customers", customers);
+                request.getRequestDispatcher("manageCustomers.jsp").forward(request, response);
+            }
+        
+    }
+        
+ 
 }

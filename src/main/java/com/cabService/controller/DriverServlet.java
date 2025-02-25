@@ -62,7 +62,7 @@ public class DriverServlet extends HttpServlet {
         String vehicleModel = request.getParameter("vehicleModel");
 
         driverDAO.addDriver(nic, name, email, phone, licenseNumber, vehicleType, vehicleModel);
-        response.sendRedirect("pages/manageDrivers.jsp?message= Driver added successfully");
+        response.sendRedirect("pages/manageDrivers.jsp?message= Driver added ");
     }
 
     //edit driver part

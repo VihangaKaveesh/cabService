@@ -24,8 +24,8 @@ public class RegisterServlet extends HttpServlet {
         String password = request.getParameter("password");
         String phone = request.getParameter("phone");
 
-        CustomerDAO customerDAO = new CustomerDAO();
-        boolean isRegistered = customerDAO.registerCustomer(nic, name, email, password, phone);
+        CustomerDAO customer = new CustomerDAO();
+        boolean isRegistered = customer.registerCustomer(nic, name, email, password, phone);
 
        if (isRegistered) {
     response.sendRedirect("pages/login.jsp?message=Registration successful! You can now log in.");
