@@ -62,7 +62,7 @@ public class DriverServlet extends HttpServlet {
         String vehicleModel = request.getParameter("vehicleModel");
 
         driverDAO.addDriver(nic, name, email, phone, licenseNumber, vehicleType, vehicleModel);
-        response.sendRedirect("pages/manageDrivers.jsp");
+        response.sendRedirect("pages/manageDrivers.jsp?message= Driver added successfully");
     }
 
     //edit driver part
@@ -75,14 +75,14 @@ public class DriverServlet extends HttpServlet {
         String status = request.getParameter("status");
 
         driverDAO.updateDriver(driverID, name, email, phone, vehicleModel, status);
-        response.sendRedirect("pages/manageDrivers.jsp");
+        response.sendRedirect("pages/manageDrivers.jsp?message= Driver edited successfully");
     }
 
     //delete driver art
     private void deleteDriver(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
         int driverID = Integer.parseInt(request.getParameter("driverID"));
         driverDAO.deleteDriver(driverID);
-        response.sendRedirect("pages/manageDrivers.jsp");
+        response.sendRedirect("pages/manageDrivers.jsp?message= Driver deleted successfully");
     }
 
     //displaying the drivers part
