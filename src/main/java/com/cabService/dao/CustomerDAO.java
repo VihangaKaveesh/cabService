@@ -111,30 +111,25 @@ public List<String[]> getAllCustomers() {
     }
 
     // Update customer details
-    public boolean updateCustomer(int customerId, String nic, String name, String email, String password, String phone) {
-        boolean success = false;
-        String query = "UPDATE customers SET NIC = ?, Name = ?, Email = ?, Password = ?, Phone = ? WHERE CustomerID = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+   public boolean updateCustomer(int customerID, String nic, String name, String email, String password, String phone) {
+    String sql = "UPDATE Customers SET NIC=?, Name=?, Email=?, Password=?, Phone=? WHERE CustomerID=?";
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, nic);
-            stmt.setString(2, name);
-            stmt.setString(3, email);
-            stmt.setString(4, password);
-            stmt.setString(5, phone);
-            stmt.setInt(6, customerId);
+        pstmt.setString(1, nic);
+        pstmt.setString(2, name);
+        pstmt.setString(3, email);
+        pstmt.setString(4, password);
+        pstmt.setString(5, phone);
+        pstmt.setInt(6, customerID);
 
-            int rowsUpdated = stmt.executeUpdate();
-            if (rowsUpdated > 0) {
-                success = true;
-                System.out.println("Customer details updated successfully.");
-            }
-        } catch (SQLException e) {
-            System.out.println("Error in updateCustomer: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return success;
+        return pstmt.executeUpdate() > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+    return false;
+}
+
 
     // Delete customer
     public boolean deleteCustomer(int customerId) {

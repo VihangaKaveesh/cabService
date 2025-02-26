@@ -29,11 +29,28 @@ public class CustomerServlet extends HttpServlet {
             if ("add".equals(action)) {
                 addCustomer(request, response);
             } else if ("update".equals(action)) {
-                updateCustomer(request, response);
-            } else if ("delete".equals(action)) {
+               
+                int customerID = Integer.parseInt(request.getParameter("customerID"));
+        String nic = request.getParameter("nic");
+        String name = request.getParameter("name");
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        String phone = request.getParameter("phone");
+
+        CustomerDAO customerDAO = new CustomerDAO();
+        boolean success = customerDAO.updateCustomer(customerID, nic, name, email, password, phone);
+
+        if (success) {
+            response.sendRedirect("pages/manageCustomers.jsp?message=updated");
+        } else {
+            response.sendRedirect("editCustomer.jsp?customerID=" + customerID + "&error=failed");
+        }
+            } 
+            
+            else if ("delete".equals(action)) {
                 deleteCustomer(request, response);
             } else {
-                response.sendRedirect("manageCustomers.jsp");
+                response.sendRedirect("pages/manageCustomers.jsp");
             }
         } catch (SQLException e) {
             throw new ServletException("Database operation failed", e);
@@ -74,15 +91,12 @@ public class CustomerServlet extends HttpServlet {
     }
 
     // Delete customer part
-    private void deleteCustomer(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
-        int customerId = Integer.parseInt(request.getParameter("customerId"));
-        boolean success = customerDAO.deleteCustomer(customerId);
-        if (success) {
-            response.sendRedirect("pages/manageCustomers.jsp?message=Customer deleted successfully");
-        } else {
-            response.sendRedirect("pages/manageCustomers.jsp?message=Failed to delete customer");
-        }
-    }
+   private void deleteCustomer(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+    int customerId = Integer.parseInt(request.getParameter("customerID"));  // Ensure case matches in JSP
+    boolean success = customerDAO.deleteCustomer(customerId);
+    response.sendRedirect("pages/manageCustomers.jsp?message=" + (success ? "Customer deleted successfully" : "Failed to delete customer"));
+}
+
 
     // Displaying customer details part
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
