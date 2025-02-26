@@ -41,7 +41,7 @@ public class CustomerServlet extends HttpServlet {
         boolean success = customerDAO.updateCustomer(customerID, nic, name, email, password, phone);
 
         if (success) {
-            response.sendRedirect("pages/manageCustomers.jsp?message=updated");
+            response.sendRedirect("pages/manageCustomers.jsp?message=updated the customer details");
         } else {
             response.sendRedirect("editCustomer.jsp?customerID=" + customerID + "&error=failed");
         }

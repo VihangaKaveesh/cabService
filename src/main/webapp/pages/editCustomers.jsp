@@ -85,7 +85,7 @@
         Email: <input type="email" name="email" value="<%= customer[3] %>" required><br>
         Password: <input type="password" name="password" value="<%= customer[4] %>" required><br>
         Phone: <input type="text" name="phone" value="<%= customer[5] %>" required><br>
-        <button type="submit">Update Customer</button>
+        <button type="submit">Update Customers</button>
     </form>
 
     <%

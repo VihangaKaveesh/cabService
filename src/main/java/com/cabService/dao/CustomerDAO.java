@@ -4,28 +4,32 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import com.cabService.dao.DBConnection;
+import jakarta.servlet.http.HttpSession;
 
 public class CustomerDAO {
 
     // Validating the customer upon login
-    public int validateCustomer(String email, String password) {
-        int customerId = -1;
-        String query = "SELECT CustomerID FROM customers WHERE Email = ? AND Password = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            
-            stmt.setString(1, email);
-            stmt.setString(2, password);
-            
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                customerId = rs.getInt("CustomerID");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+   public int validateCustomer(String email, String password, HttpSession session) {
+    int customerId = -1;
+    String query = "SELECT CustomerID FROM customers WHERE Email = ? AND Password = ?";
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(query)) {
+        
+        stmt.setString(1, email);
+        stmt.setString(2, password);
+        
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            customerId = rs.getInt("CustomerID");
+            // Optionally store additional session attributes if needed
+            session.setAttribute("role", "customer");  // For example
         }
-        return customerId;
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+    return customerId;
+}
+
 
     // Registering the customer
     public boolean registerCustomer(String nic, String name, String email, String password, String phone) {

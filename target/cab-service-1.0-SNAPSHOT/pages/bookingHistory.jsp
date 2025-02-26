@@ -69,7 +69,6 @@
     <body>
         
           <div class="navbar">
-               <a href="${pageContext.request.contextPath}/pages/managementDashboard.jsp">Home</a>
                <a href="${pageContext.request.contextPath}/pages/customerDashboard.jsp">Home</a>
         <a href="${pageContext.request.contextPath}/pages/rideRequest.jsp">Need a Ride</a>
         <a href="${pageContext.request.contextPath}/pages/bookingHistory.jsp">History</a>

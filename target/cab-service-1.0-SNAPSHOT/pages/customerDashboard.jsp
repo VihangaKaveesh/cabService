@@ -5,6 +5,18 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    //HttpSession session = request.getSession(false); // Get the current session, do not create a new one
+
+    // Check if session exists and if user is logged in
+    if (session == null || session.getAttribute("userId") == null || !"customer".equals(session.getAttribute("role"))) {
+        response.sendRedirect("login.jsp?message=You must log in first");
+        return; // Stop the execution of the page
+    }
+    
+    //int customerId = (int) session.getAttribute("userId"); // Get the logged-in user's customer ID
+        
+%>
 <!DOCTYPE html>
 <html>
     <head>
