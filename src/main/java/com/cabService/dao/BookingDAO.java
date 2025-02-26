@@ -20,25 +20,25 @@ public class BookingDAO {
             conn = DBConnection.getConnection();
 
             // Fetch vehicle type and price based on PackageID
-            String packageQuery = "SELECT VehicleType, Price FROM RidePackages WHERE PackageID = ?";
-            packageStmt = conn.prepareStatement(packageQuery);
-            packageStmt.setInt(1, packageId);
-            rs = packageStmt.executeQuery();
-
-            if (!rs.next()) {
-                return false; // No matching package
-            }
+//            String packageQuery = "SELECT VehicleType, Price FROM RidePackages WHERE PackageID = ?";
+//            packageStmt = conn.prepareStatement(packageQuery);
+//            packageStmt.setInt(1, packageId);
+//            rs = packageStmt.executeQuery();
+//
+//            if (!rs.next()) {
+//                return false; // No matching package
+//            }
 
             String vehicleType = rs.getString("VehicleType");
             double price = rs.getDouble("Price");
 
             // Insert booking
-            String insertQuery = "INSERT INTO Bookings (CustomerID, PickupLocation, DropoffLocation, VehicleType, PackageID, Price, Status) VALUES (?, ?, ?, ?, ?, ?, 'Pending')";
+            String insertQuery = "INSERT INTO Bookings (CustomerID, PickupLocation, DropoffLocation, PackageID, Price, Status) VALUES (?, ?, ?, ?, ?, 'Pending')";
             pstmt = conn.prepareStatement(insertQuery);
             pstmt.setInt(1, customerId);
             pstmt.setString(2, pickupLocation);
             pstmt.setString(3, dropoffLocation);
-            pstmt.setString(4, vehicleType);
+//            pstmt.setString(4, vehicleType);
             pstmt.setInt(5, packageId);
             pstmt.setDouble(6, price);
 
@@ -54,6 +54,49 @@ public class BookingDAO {
                 if (conn != null) conn.close();
             } catch (SQLException e) {
                 e.printStackTrace();
+            }
+        }
+    }
+     
+       public boolean assignDriverToBooking(int bookingID, int driverID) {
+        Connection conn = null;
+        PreparedStatement psUpdateBooking = null;
+        PreparedStatement psUpdateDriver = null;
+        
+        try {
+            conn = DBConnection.getConnection();
+            conn.setAutoCommit(false); // Start transaction
+
+            // Update booking: Assign driver and update status
+            String updateBookingSQL = "UPDATE Bookings SET DriverID = ?, Status = 'Assigned' WHERE BookingID = ?";
+            psUpdateBooking = conn.prepareStatement(updateBookingSQL);
+            psUpdateBooking.setInt(1, driverID);
+            psUpdateBooking.setInt(2, bookingID);
+            psUpdateBooking.executeUpdate();
+
+            // Update driver: Change status to 'Assigned'
+            String updateDriverSQL = "UPDATE Drivers SET Status = 'Assigned' WHERE DriverID = ?";
+            psUpdateDriver = conn.prepareStatement(updateDriverSQL);
+            psUpdateDriver.setInt(1, driverID);
+            psUpdateDriver.executeUpdate();
+
+            conn.commit(); // Commit transaction
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            try {
+                if (conn != null) conn.rollback(); // Rollback in case of failure
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
+            return false;
+        } finally {
+            try {
+                if (psUpdateBooking != null) psUpdateBooking.close();
+                if (psUpdateDriver != null) psUpdateDriver.close();
+                if (conn != null) conn.close();
+            } catch (SQLException closeEx) {
+                closeEx.printStackTrace();
             }
         }
     }

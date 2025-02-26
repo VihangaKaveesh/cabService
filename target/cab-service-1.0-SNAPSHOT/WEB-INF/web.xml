@@ -8,6 +8,10 @@
         <servlet-name>BookingServlet</servlet-name>
         <servlet-class>com.cabService.controller.BookingServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DriverAssignServlet</servlet-name>
+        <servlet-class>com.cabService.controller.DriverAssignServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/RegisterServlet</url-pattern>
@@ -19,6 +23,10 @@
     <servlet-mapping>
         <servlet-name>BookingServlet</servlet-name>
         <url-pattern>/BookingServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DriverAssignServlet</servlet-name>
+        <url-pattern>/DriverAssignServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

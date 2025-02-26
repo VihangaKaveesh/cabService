@@ -1,23 +1,21 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package com.cabService.controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import com.cabService.dao.BookingDAO;
+import com.cabService.dao.DBConnection;
 
-/**
- *
- * @author vihan
- */
 public class BookingServlet extends HttpServlet {
-   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+   
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             int customerId = Integer.parseInt(request.getParameter("customerId"));
             String pickupLocation = request.getParameter("pickupLocation");
@@ -35,5 +33,6 @@ public class BookingServlet extends HttpServlet {
             response.sendRedirect("pages/rideRequest.jsp?message=Invalid input.");
         }
     }
-
+   
+    
 }

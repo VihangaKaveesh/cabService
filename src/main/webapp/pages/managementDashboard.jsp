@@ -47,7 +47,8 @@
             <a href="${pageContext.request.contextPath}/pages/customerDashboard.jsp">Home</a>
         <a href="${pageContext.request.contextPath}/pages/manageCustomers.jsp">Customers</a>
         <a href="${pageContext.request.contextPath}/pages/manageDrivers.jsp">Drivers</a>
-        <a href="${pageContext.request.contextPath}/pages/manageBookings.jsp">Bookings</a>
+         <a href="${pageContext.request.contextPath}/pages/driverAssign.jsp">Assign a driver</a>
+         <a href="${pageContext.request.contextPath}/pages/manageBookings.jsp">Bookings</a>
         <a href="${pageContext.request.contextPath}/pages/login.jsp">Logout</a>
        
     </div>
