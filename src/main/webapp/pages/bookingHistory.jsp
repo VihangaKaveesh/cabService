@@ -1,81 +1,108 @@
-<%-- 
-    Document   : bookingHistory
-    Created on : Feb 23, 2025, 2:06:04 PM
-    Author     : vihan
---%>
+<%@ page import="java.util.List, java.util.HashMap, com.cabService.dao.BookingDAO" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page session="true" %>
+<%
+    // Check if session exists and if user is logged in as customer
+    if (session == null || session.getAttribute("userId") == null || !"customer".equals(session.getAttribute("role"))) {
+        response.sendRedirect("login.jsp?message=You must log in first");
+        return; // Stop the execution of the page
+    }
+    Integer customerID = (Integer) session.getAttribute("userId"); // Use consistent 'userId'
+    List<HashMap<String, String>> bookings = BookingDAO.getCustomerBookings(customerID); // Fetch bookings for the customer
+%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+<head>
+    <title>Booking History</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .btn {
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            color: white;
+            background-color: blue;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 5px;
+        }
         
-        <style>
-        body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
-
-.navbar {
-    background-color: #333;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    padding: 10px 0;
-    flex-wrap: wrap;
-}
-
-.navbar a {
-    color: white;
-    padding: 14px 20px;
-    text-decoration: none;
-    text-align: center;
-    transition: background 0.3s ease-in-out;
-}
-
-.navbar a:hover {
-    background-color: #575757;
-     border-radius: 5px
-}
-
-@media screen and (max-width: 768px) {
-    .navbar {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .navbar a {
-        width: 100%;
-        padding: 12px;
-    }
-}
-
-@media screen and (max-width: 480px) {
-    .navbar {
-        padding: 5px 0;
-    }
-
-    .navbar a {
-        padding: 10px;
-        font-size: 14px;
-    }
-}
-
+         body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        .navbar {
+            background-color: #333;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+        }
+        .navbar a {
+            color: white;
+            padding: 14px 20px;
+            text-decoration: none;
+            text-align: center;
+        }
+        .navbar a:hover {
+            background-color: #575757;
+             border-radius: 5px
+        }
     </style>
+</head>
+<body>
     
-    </head>
-    <body>
-        
-          <div class="navbar">
+    <div class="navbar">
                <a href="${pageContext.request.contextPath}/pages/customerDashboard.jsp">Home</a>
         <a href="${pageContext.request.contextPath}/pages/rideRequest.jsp">Need a Ride</a>
         <a href="${pageContext.request.contextPath}/pages/bookingHistory.jsp">History</a>
         <a href="${pageContext.request.contextPath}/pages/login.jsp">Logout</a>
        
     </div>
-        
-        <h1>Hello World!</h1>
-    </body>
+
+    <h2>Your Booking History</h2>
+
+    <table>
+        <tr>
+            <th>Pickup Location</th>
+            <th>Dropoff Location</th>
+            <th>Date</th>
+            <th>Vehicle Type</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Receipt</th>
+        </tr>
+
+        <%
+            // Iterate through the bookings and display them in table rows
+            for (HashMap<String, String> booking : bookings) { 
+        %>
+            <tr>
+                <td><%= booking.get("PickupLocation") %></td>
+                <td><%= booking.get("DropoffLocation") %></td>
+                <td><%= booking.get("BookingDate") %></td>
+                <td><%= booking.get("VehicleType") %></td>
+                <td>$<%= booking.get("Price") %></td>
+                <td><%= booking.get("Status") %></td>
+                <td>
+                    <% if ("Assigned".equals(booking.get("Status"))) { %>
+                        <a href="receipt.jsp?bookingID=<%= booking.get("BookingID") %>" class="btn">View Receipt</a>
+                    <% } else { %>
+                        <span>-</span>
+                    <% } %>
+                </td>
+            </tr>
+        <% } %>
+    </table>
+
+</body>
 </html>

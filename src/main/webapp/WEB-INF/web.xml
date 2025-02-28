@@ -12,6 +12,18 @@
         <servlet-name>DriverAssignServlet</servlet-name>
         <servlet-class>com.cabService.controller.DriverAssignServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ManageBookingServlet</servlet-name>
+        <servlet-class>com.cabService.controller.ManageBookingServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>bookingHistoryServlet</servlet-name>
+        <servlet-class>com.cabService.controller.BookingHistoryServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>receiptServlet</servlet-name>
+        <servlet-class>com.cabService.controller.ReceiptServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/RegisterServlet</url-pattern>
@@ -27,6 +39,18 @@
     <servlet-mapping>
         <servlet-name>DriverAssignServlet</servlet-name>
         <url-pattern>/DriverAssignServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ManageBookingServlet</servlet-name>
+        <url-pattern>/ManageBookingServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>bookingHistoryServlet</servlet-name>
+        <url-pattern>/bookingHistoryServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>receiptServlet</servlet-name>
+        <url-pattern>/receiptServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
