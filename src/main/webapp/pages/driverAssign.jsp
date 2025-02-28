@@ -73,7 +73,7 @@
             <td><%= booking.get("DropoffLocation") %></td>
             <td><%= booking.get("VehicleType") %></td>
             <td>
-                <form action="DriverAssignServlet" method="POST">
+                <form action="${pageContext.request.contextPath}/DriverAssignServlet" method="POST">
                     <input type="hidden" name="bookingID" value="<%= booking.get("BookingID") %>">
                     <select name="driverID" required>
                         <option value="">Select Driver</option>
@@ -88,10 +88,11 @@
                             }
                         %>
                     </select>
-                </form>
+                
                     
             </td>
             <td> <button type="submit">Assign</button></td>
+            </form>
         </tr>
         <%
                 }
