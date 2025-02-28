@@ -159,7 +159,7 @@ public class BookingDAO {
         return bookings;
     }
 
-  public static List<HashMap<String, String>> getCustomerBookings(int customerID) {
+ public static List<HashMap<String, String>> getCustomerBookings(int customerID) {
     List<HashMap<String, String>> bookings = new ArrayList<>();
 
     try (Connection conn = DBConnection.getConnection()) {
@@ -179,7 +179,11 @@ public class BookingDAO {
             booking.put("BookingID", String.valueOf(rs.getInt("BookingID")));
             booking.put("PickupLocation", rs.getString("PickupLocation"));
             booking.put("DropoffLocation", rs.getString("DropoffLocation"));
-            booking.put("Date", rs.getString("BookingDate"));
+
+            // Fetch the date correctly
+            java.sql.Timestamp bookingDate = rs.getTimestamp("BookingDate");
+            booking.put("Date", bookingDate != null ? bookingDate.toString() : "N/A");
+
             booking.put("VehicleType", rs.getString("VehicleType"));
             booking.put("Price", String.valueOf(rs.getDouble("Price")));
             booking.put("Status", rs.getString("Status"));
@@ -193,20 +197,20 @@ public class BookingDAO {
 }
 
   
-  public static HashMap<String, String> getReceiptDetails(int bookingID) {
+  public static HashMap<String, String> getReceiptDetails(int BookingID) {
     HashMap<String, String> receiptDetails = new HashMap<>();
 
     try (Connection conn = DBConnection.getConnection()) {
         String sql = "SELECT b.BookingID, b.PickupLocation, b.DropoffLocation, b.BookingDate, " +
                      "p.VehicleType, p.Price, " +
                      "d.Name, d.Phone,d.VehicleModel, d.LicenseNumber,  " +
-                     "FROM Bookings b " +
+                     "FROM bookings b " +
                      "JOIN ridepackages p ON b.PackageID = p.PackageID  " +
                      "JOIN Drivers d ON b.DriverID = d.DriverID " +
                      "WHERE b.BookingID = ? AND b.Status IN ('Assigned', 'Completed')";
 
         PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setInt(1, bookingID);
+        ps.setInt(1, BookingID);
         ResultSet rs = ps.executeQuery();
 
         if (rs.next()) {
@@ -218,7 +222,7 @@ public class BookingDAO {
             receiptDetails.put("Price", String.valueOf(rs.getDouble("Price")));
             receiptDetails.put("VehicleModel", rs.getString("VehicleModel"));
             receiptDetails.put("VehicleNumber", rs.getString("VehicleNumber"));
-            receiptDetails.put("DriverName", rs.getString("DriverName"));
+            receiptDetails.put("DriverName", rs.getString("Name"));
             receiptDetails.put("Phone", rs.getString("Phone"));
         }
     } catch (SQLException e) {

@@ -39,7 +39,7 @@
             border-radius: 5px;
         }
         
-         body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
         .navbar {
             background-color: #333;
             overflow: hidden;
@@ -55,18 +55,17 @@
         }
         .navbar a:hover {
             background-color: #575757;
-             border-radius: 5px
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
     
     <div class="navbar">
-               <a href="${pageContext.request.contextPath}/pages/customerDashboard.jsp">Home</a>
+        <a href="${pageContext.request.contextPath}/pages/customerDashboard.jsp">Home</a>
         <a href="${pageContext.request.contextPath}/pages/rideRequest.jsp">Need a Ride</a>
         <a href="${pageContext.request.contextPath}/pages/bookingHistory.jsp">History</a>
         <a href="${pageContext.request.contextPath}/pages/login.jsp">Logout</a>
-       
     </div>
 
     <h2>Your Booking History</h2>
@@ -89,13 +88,16 @@
             <tr>
                 <td><%= booking.get("PickupLocation") %></td>
                 <td><%= booking.get("DropoffLocation") %></td>
-                <td><%= booking.get("BookingDate") %></td>
+                <td><%= booking.get("Date") %></td>
                 <td><%= booking.get("VehicleType") %></td>
                 <td>$<%= booking.get("Price") %></td>
                 <td><%= booking.get("Status") %></td>
                 <td>
-                    <% if ("Assigned".equals(booking.get("Status"))) { %>
-                        <a href="receipt.jsp?bookingID=<%= booking.get("BookingID") %>" class="btn">View Receipt</a>
+                    <% if ("Assigned".equals(booking.get("Status")) || "Completed".equals(booking.get("Status"))) { %>
+                        <form action="receipt.jsp" method="get">
+                            <input type="hidden" name="bookingID" value="<%= booking.get("BookingID") %>">
+                            <button type="submit" class="btn">View Receipt</button>
+                        </form>
                     <% } else { %>
                         <span>-</span>
                     <% } %>
