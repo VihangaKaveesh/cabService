@@ -37,7 +37,7 @@ public class DriverDAO {
         try (Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                String[] driver = new String[10];
+                String[] driver = new String[9];
                 driver[0] = String.valueOf(rs.getInt("DriverID"));
                 driver[1] = rs.getString("NIC");
                 driver[2] = rs.getString("Name");
@@ -46,7 +46,7 @@ public class DriverDAO {
                 driver[5] = rs.getString("LicenseNumber");
                 driver[6] = rs.getString("VehicleType");
                 driver[7] = rs.getString("VehicleModel");
-                driver[9] = rs.getString("Status");
+                driver[8] = rs.getString("Status");
                 drivers.add(driver);
             }
         }

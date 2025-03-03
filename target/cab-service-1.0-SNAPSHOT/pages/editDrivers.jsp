@@ -37,18 +37,30 @@
             background-color: #575757;
              border-radius: 5px
         }
-   table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        table, th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
+  h2, h3 {
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    background: #f8f8f8;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+}
+
+form input, form select{
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
     </style>
     
     </head>
@@ -71,10 +83,6 @@
         Connection conn = null;
         String[] driver = null;
 
-        if (driver == null) {
-    response.sendRedirect("manageDrivers.jsp?error=Driver not found");
-    return;
-}
         if (driverID != null) {
             try {
                 conn = DBConnection.getConnection();
@@ -99,9 +107,8 @@
         Vehicle Model: <input type="text" name="vehicleModel" value="<%= driver[7] %>" required><br>
         Status:
         <select name="status">
-            <option value="Available" <%= "Available".equals(driver[8]) ? "selected" : "" %>>Available</option>
-            <option value="Assigned" <%= "Assigned".equals(driver[8]) ? "selected" : "" %>>Assigned</option>
-
+            <option value="Available" <%= driver[8].equals("Available") ? "selected" : "" %>>Available</option>
+            <option value="Assigned" <%= driver[8].equals("Assigned") ? "selected" : "" %>>Assigned</option>
         </select><br>
         <button type="submit">Update Driver</button>
     </form>

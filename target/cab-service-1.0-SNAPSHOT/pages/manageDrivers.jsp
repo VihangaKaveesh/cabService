@@ -189,9 +189,9 @@ th {
                 <td><%= driver[5] %></td>
                 <td><%= driver[6] %></td>
                 <td><%= driver[7] %></td>
-                <td><%= driver[9] %></td>
-                <td>
-                    <a href="editDriver.jsp?driverID=<%= driver[0] %>">Edit</a> |
+               <td><%= driver[8] %></td> 
+<td>
+    <a href="editDrivers.jsp?driverID=<%= driver[0] %>">Edit</a> |
                     <form  class="deletebtn" action="${pageContext.request.contextPath}/DriverServlet" method="post" style="display:inline;">
                         <input type="hidden" name="action" value="delete">
                         <input type="hidden" name="driverID" value="<%= driver[0] %>">

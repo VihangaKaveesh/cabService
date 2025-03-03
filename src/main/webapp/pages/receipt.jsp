@@ -84,7 +84,7 @@
             <tr><th>Dropoff Location</th><td><%= receipt.getOrDefault("DropoffLocation", "N/A") %></td></tr>
             <tr><th>Date</th><td><%= receipt.getOrDefault("Date", "N/A") %></td></tr>
             <tr><th>Vehicle Type</th><td><%= receipt.getOrDefault("VehicleType", "N/A") %></td></tr>
-            <tr><th>Price</th><td>$<%= receipt.getOrDefault("Price", "0.00") %></td></tr>
+            <tr><th>Price(LKR)</th><td><%= receipt.getOrDefault("Price", "0.00") %></td></tr>
             <tr><th>Vehicle Model</th><td><%= receipt.getOrDefault("VehicleModel", "N/A") %></td></tr>
             <tr><th>License Number</th><td><%= receipt.getOrDefault("LicenseNumber", "N/A") %></td></tr>
             <tr><th>Driver Name</th><td><%= receipt.getOrDefault("DriverName", "N/A") %></td></tr>

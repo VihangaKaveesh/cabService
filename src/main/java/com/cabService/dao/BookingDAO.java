@@ -228,9 +228,9 @@ public class BookingDAO {
     try (Connection conn = DBConnection.getConnection()) {
         String sql = "SELECT b.BookingID, b.PickupLocation, b.DropoffLocation, b.BookingDate, " +
                      "p.VehicleType, p.Price, " +
-                     "d.Name, d.Phone,d.VehicleModel, d.LicenseNumber  " +
+                     "d.Name, d.Phone, d.VehicleModel, d.LicenseNumber " +
                      "FROM bookings b " +
-                     "JOIN ridepackages p ON b.PackageID = p.PackageID  " +
+                     "JOIN ridepackages p ON b.PackageID = p.PackageID " +
                      "JOIN Drivers d ON b.DriverID = d.DriverID " +
                      "WHERE b.BookingID = ? AND b.Status IN ('Assigned', 'Completed')";
 
@@ -246,7 +246,7 @@ public class BookingDAO {
             receiptDetails.put("VehicleType", rs.getString("VehicleType"));
             receiptDetails.put("Price", String.valueOf(rs.getDouble("Price")));
             receiptDetails.put("VehicleModel", rs.getString("VehicleModel"));
-            receiptDetails.put("VehicleNumber", rs.getString("VehicleNumber"));
+            receiptDetails.put("LicenseNumber", rs.getString("LicenseNumber")); // Fixed: Changed from "VehicleNumber"
             receiptDetails.put("DriverName", rs.getString("Name"));
             receiptDetails.put("Phone", rs.getString("Phone"));
         }
@@ -255,6 +255,7 @@ public class BookingDAO {
     }
     return receiptDetails;
 }
+
 
 
 }
