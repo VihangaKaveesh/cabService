@@ -14,53 +14,36 @@ import java.util.Map;
 
 
 public class BookingDAO {
-     public static boolean addBooking(int customerId, String pickupLocation, String dropoffLocation, int packageId) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        PreparedStatement packageStmt = null;
-        ResultSet rs = null;
+    public static boolean addBooking(int customerId, String pickupLocation, String dropoffLocation, int packageId) {
+    Connection conn = null;
+    PreparedStatement pstmt = null;
 
+    try {
+        conn = DBConnection.getConnection();
+
+        // Insert booking (without VehicleType & Price since they were dropped)
+        String insertQuery = "INSERT INTO Bookings (CustomerID, PickupLocation, DropoffLocation, PackageID, Status) " +
+                             "VALUES (?, ?, ?, ?, 'Pending')";
+        pstmt = conn.prepareStatement(insertQuery);
+        pstmt.setInt(1, customerId);
+        pstmt.setString(2, pickupLocation);
+        pstmt.setString(3, dropoffLocation);
+        pstmt.setInt(4, packageId);
+
+        return pstmt.executeUpdate() > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    } finally {
         try {
-            conn = DBConnection.getConnection();
-
-            // Fetch vehicle type and price based on PackageID
-//            String packageQuery = "SELECT VehicleType, Price FROM RidePackages WHERE PackageID = ?";
-//            packageStmt = conn.prepareStatement(packageQuery);
-//            packageStmt.setInt(1, packageId);
-//            rs = packageStmt.executeQuery();
-//
-//            if (!rs.next()) {
-//                return false; // No matching package
-//            }
-
-            String vehicleType = rs.getString("VehicleType");
-            double price = rs.getDouble("Price");
-
-            // Insert booking
-            String insertQuery = "INSERT INTO Bookings (CustomerID, PickupLocation, DropoffLocation, PackageID, Price, Status) VALUES (?, ?, ?, ?, ?, 'Pending')";
-            pstmt = conn.prepareStatement(insertQuery);
-            pstmt.setInt(1, customerId);
-            pstmt.setString(2, pickupLocation);
-            pstmt.setString(3, dropoffLocation);
-//            pstmt.setString(4, vehicleType);
-            pstmt.setInt(5, packageId);
-            pstmt.setDouble(6, price);
-
-            return pstmt.executeUpdate() > 0;
+            if (pstmt != null) pstmt.close();
+            if (conn != null) conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (packageStmt != null) packageStmt.close();
-                if (pstmt != null) pstmt.close();
-                if (conn != null) conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
+}
+
      
        public boolean assignDriverToBooking(int bookingID, int driverID) {
         Connection conn = null;
@@ -106,23 +89,65 @@ public class BookingDAO {
     }
        
          public static boolean updateBookingStatus(int bookingID, String status) {
-        boolean updated = false;
+    boolean updated = false;
+    Connection conn = null;
+    PreparedStatement ps = null;
+    
+    try {
+        conn = DBConnection.getConnection();
+        conn.setAutoCommit(false); // Start transaction
+        
+        // Update booking status
+        String sql = "UPDATE Bookings SET Status = ? WHERE BookingID = ?";
+        ps = conn.prepareStatement(sql);
+        ps.setString(1, status);
+        ps.setInt(2, bookingID);
+        int rowsAffected = ps.executeUpdate();
+        
+        if (rowsAffected > 0 && "Completed".equals(status)) {
+            // Retrieve driverID associated with the booking
+            String getDriverSql = "SELECT DriverID FROM Bookings WHERE BookingID = ?";
+            try (PreparedStatement psDriver = conn.prepareStatement(getDriverSql)) {
+                psDriver.setInt(1, bookingID);
+                ResultSet rs = psDriver.executeQuery();
+                
+                if (rs.next()) {
+                    int driverID = rs.getInt("DriverID");
 
-        try (Connection conn = DBConnection.getConnection()) {
-            String sql = "UPDATE Bookings SET Status = ? WHERE BookingID = ?";
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, status);
-            ps.setInt(2, bookingID);
+                    if (driverID > 0) { // Ensure driverID exists
+                        // Update the driver's status to "Available"
+                        String updateDriverSql = "UPDATE Drivers SET Status = 'Available' WHERE DriverID = ?";
+                        try (PreparedStatement psUpdateDriver = conn.prepareStatement(updateDriverSql)) {
+                            psUpdateDriver.setInt(1, driverID);
+                            psUpdateDriver.executeUpdate();
+                        }
+                    }
+                }
+            }
+        }
 
-            int rowsAffected = ps.executeUpdate();
-            updated = (rowsAffected > 0);
-
-            ps.close();
-        } catch (Exception e) {
+        conn.commit(); // Commit transaction
+        updated = true;
+    } catch (Exception e) {
+        if (conn != null) {
+            try {
+                conn.rollback(); // Rollback on error
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        e.printStackTrace();
+    } finally {
+        try {
+            if (ps != null) ps.close();
+            if (conn != null) conn.close();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-        return updated;
-    } 
+    }
+    return updated;
+}
+
          
         
          // Fetch all bookings with package details
@@ -203,7 +228,7 @@ public class BookingDAO {
     try (Connection conn = DBConnection.getConnection()) {
         String sql = "SELECT b.BookingID, b.PickupLocation, b.DropoffLocation, b.BookingDate, " +
                      "p.VehicleType, p.Price, " +
-                     "d.Name, d.Phone,d.VehicleModel, d.LicenseNumber,  " +
+                     "d.Name, d.Phone,d.VehicleModel, d.LicenseNumber  " +
                      "FROM bookings b " +
                      "JOIN ridepackages p ON b.PackageID = p.PackageID  " +
                      "JOIN Drivers d ON b.DriverID = d.DriverID " +

@@ -95,14 +95,14 @@ form input, form select{
             <% while (rs.next()) { %>
                 <option value="<%= rs.getInt("PackageID") %>" 
                         data-vehicle="<%= rs.getString("VehicleType") %>" 
-                        data PackageName="<%= rs.getString("PackageName") %>" 
+                        data-PackageName="<%= rs.getString("PackageName") %>" 
                         data-price="<%= rs.getDouble("Price") %>">
                     <%= rs.getString("VehicleType") %> - <%= rs.getString("PackageName")%>km - <%= rs.getDouble("Price") %>LKR
                 </option>
             <% } %>
         </select><br>
 
-         <button type="submit">Add Driver</button>
+         <button type="submit">Add Request</button>
     </form>
 </body>
 </html>

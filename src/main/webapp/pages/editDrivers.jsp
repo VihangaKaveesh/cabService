@@ -71,6 +71,10 @@
         Connection conn = null;
         String[] driver = null;
 
+        if (driver == null) {
+    response.sendRedirect("manageDrivers.jsp?error=Driver not found");
+    return;
+}
         if (driverID != null) {
             try {
                 conn = DBConnection.getConnection();
@@ -95,8 +99,9 @@
         Vehicle Model: <input type="text" name="vehicleModel" value="<%= driver[7] %>" required><br>
         Status:
         <select name="status">
-            <option value="Available" <%= driver[8].equals("Available") ? "selected" : "" %>>Available</option>
-            <option value="Assigned" <%= driver[8].equals("Assigned") ? "selected" : "" %>>Assigned</option>
+            <option value="Available" <%= "Available".equals(driver[8]) ? "selected" : "" %>>Available</option>
+            <option value="Assigned" <%= "Assigned".equals(driver[8]) ? "selected" : "" %>>Assigned</option>
+
         </select><br>
         <button type="submit">Update Driver</button>
     </form>

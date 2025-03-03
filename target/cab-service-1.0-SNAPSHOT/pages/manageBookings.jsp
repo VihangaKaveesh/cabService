@@ -104,7 +104,7 @@
                 <th>Driver ID</th>
                 <th>Package Name</th>
                 <th>Vehicle Type</th>
-                <th>Price</th>
+                <th>Price (LKR)</th>
                 <th>Status</th>
                 <th>Actions</th>
             </tr>
@@ -139,7 +139,7 @@
                 <td><%= (driverID != 0 ? driverID : "Not Assigned") %></td>
                 <td><%= packageName %></td>
                 <td><%= vehicleType %></td>
-                <td>$<%= price %></td>
+                <td><%= price %></td>
                 <td class="status-<%= status.toLowerCase() %>"><%= status %></td>
                 <td>
                     <form action="${pageContext.request.contextPath}/ManageBookingServlet" method="POST">
